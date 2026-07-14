@@ -1,4 +1,67 @@
----
+# CineMatch — Personalized Movie Discovery Platform
+
+A full-stack MERN application that uses **TMDB** as the movie data source of
+truth while all personalization, ranking, ratings, and recommendation logic
+is implemented independently. A second-stage **LLM layer (Google Gemini)**
+reranks and explains recommendations in plain language, with the app staying
+fully functional if the LLM is ever unavailable.
+
+This is not a streaming or booking platform — it's a discovery tool that
+helps you decide what to watch next.
+
+## Features
+
+- **Auth** — JWT-based register/login, bcrypt password hashing
+- **Home** — live "Trending," "Most Popular," "Top Rated," and "Recently
+  Released" rows pulled directly from TMDB, cached server-side
+- **Discover** — structured filters (title, up to 2 genres, director, actors,
+  min. rating, year range, runtime, language), ranked by a custom weighted
+  scoring formula (Bayesian rating + popularity), not just TMDB's raw order
+- **Movie Details** — full info, cast/crew, TMDB rating alongside your
+  platform's own live-updating **community rating**
+- **Ratings & Reviews** — 5-star ratings with optional text reviews;
+  ratings incrementally update your derived taste profile
+- **Watchlist** and **Recently Viewed** tracking
+- **Profile** — stats, favourite genres/directors/actors, and two Chart.js
+  visualizations (genre distribution, rating distribution)
+- **Recommendations ("For You")** — a two-stage hybrid engine:
+  1. Your backend generates a ranked candidate pool from TMDB using your
+     rating history (recency-weighted) or a neutral trending pool for new
+     users / explicit search requests
+  2. Gemini reranks the shortlist and writes a short "why this fits you"
+     explanation for each pick — restricted to *only* recommending movies
+     from that shortlist, and the app falls back to deterministic ranking
+     seamlessly if the LLM is unavailable or a quota limit is hit
+  3. Supports natural-language requests like *"an emotional sci-fi movie
+     like Interstellar but less complex"*
+
+## Tech stack
+
+**Frontend:** React (Vite), React Router, Axios, Context API, Tailwind CSS, Chart.js
+**Backend:** Node.js, Express, MongoDB Atlas + Mongoose, JWT, bcrypt
+**External APIs:** TMDB (movie data), Google Gemini (recommendation explanations)
+
+## Project structure
+
+CineMatch/
+  backend/
+    config/          - DB, TMDB client, Gemini client
+    controllers/
+    middlewares/      - auth + error handling
+    models/            - User, Rating, Watchlist, RecentlyViewed, MovieStats
+    routes/
+    services/          - tmdbService, discoveryService, recommendationService, llmService, preferenceService
+    utils/             - scoring, cache, JWT helper
+    app.js
+    server.js
+  frontend/
+    src/
+      components/
+      context/        - AuthContext
+      hooks/
+      layouts/
+      pages/
+      services/       - API call wrappers
 
 ## Prerequisites
 
@@ -8,16 +71,12 @@
 - A free [Google AI Studio](https://aistudio.google.com/apikey) account (optional — the app works without this, just without AI-generated explanations)
 - Git
 
----
-
 ## 1. Clone the repository
 
 ```bash
 git clone <your-repo-url>
 cd CineMatch
 ```
-
----
 
 ## 2. Get your API keys
 
@@ -39,8 +98,6 @@ cd CineMatch
 3. If you ever hit a free-tier quota limit and recommendations seem to lose their AI-written explanations, check which models your key can access at:
    `https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY`
    and swap the `GEMINI_MODEL` value in `.env` to another available model. The app degrades gracefully either way — recommendations still work without Gemini, just with simpler auto-generated explanations.
-
----
 
 ## 3. Backend setup
 
@@ -81,8 +138,6 @@ Quick sanity check in a separate terminal:
 curl http://localhost:5000/api/health
 ```
 
----
-
 ## 4. Frontend setup
 
 Open a **second terminal** (leave the backend running in the first one):
@@ -96,8 +151,6 @@ Open **http://localhost:5173** in your browser. Vite automatically proxies
 all `/api/...` requests to the backend on port 5000, so no CORS setup or
 extra `.env` file is needed for local development.
 
----
-
 ## 5. Using the app
 
 1. Register an account (or log in if you already have one)
@@ -108,8 +161,6 @@ extra `.env` file is needed for local development.
    crime movie like Se7en"* or *"a high-octane superhero movie like Batman
    Begins"*
 4. Check your **Profile** page for stats and taste charts
-
----
 
 ## Available scripts
 
@@ -128,8 +179,6 @@ extra `.env` file is needed for local development.
 | `npm run build` | Production build, output to `dist/` |
 | `npm run preview` | Preview the production build locally |
 
----
-
 ## Notes & known limitations
 
 - Movie metadata is never duplicated locally — TMDB is the single source of
@@ -146,8 +195,6 @@ extra `.env` file is needed for local development.
 - Reference-title matching (e.g. "like Interstellar") depends on TMDB's own
   `/similar` and `/recommendations` endpoints, which aren't perfect — very
   obscure or unusually stylized titles can occasionally be mismatched.
-
----
 
 ## Tech notes worth knowing (useful for interviews / code review)
 
