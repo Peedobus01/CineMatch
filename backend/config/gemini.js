@@ -1,7 +1,6 @@
 const axios = require("axios");
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
-// const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 const BASE_URL = "https://generativelanguage.googleapis.com/v1beta";
 
 async function generateStructuredContent({ prompt, schema, temperature = 0.4 }) {
@@ -21,7 +20,6 @@ async function generateStructuredContent({ prompt, schema, temperature = 0.4 }) 
           responseMimeType: "application/json",
           responseSchema: schema,
           temperature,
-          thinkingConfig: { thinkingBudget: 0 },
         },
       },
       {
