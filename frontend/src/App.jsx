@@ -11,6 +11,8 @@ import Watchlist from "./pages/Watchlist";
 import Profile from "./pages/Profile";
 import Recommendations from "./pages/Recommendations";
 import Placeholder from "./pages/Placeholder";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
         {/* Public auth routes render without the navbar shell */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* Everything else shares the navbar layout */}
         <Route element={<AppLayout />}>

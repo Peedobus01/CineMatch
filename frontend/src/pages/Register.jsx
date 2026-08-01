@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import AuthVisualPanel from "../components/AuthVisualPanel";
+import PasswordInput from "../components/PasswordInput";
 
 export default function Register() {
   const { register } = useAuth();
@@ -45,19 +46,12 @@ export default function Register() {
       <div className="flex flex-1 items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
           <div className="mb-8 lg:hidden">
-            <span className="font-display text-2xl font-semibold text-cream">
-              CineMatch
-            </span>
+            <span className="font-display text-2xl font-semibold text-cream">CineMatch</span>
           </div>
 
-          <h2 className="font-display text-3xl font-semibold text-cream mb-1">
-            Create your account
-          </h2>
+          <h2 className="font-display text-3xl font-semibold text-cream mb-1">Create your account</h2>
           <p className="text-muted text-sm mb-8">
-            Already have one?{" "}
-            <Link to="/login" className="text-amber hover:text-amber-soft">
-              Log in
-            </Link>
+            Already have one? <Link to="/login" className="text-amber hover:text-amber-soft">Log in</Link>
           </p>
 
           {error && (
@@ -68,9 +62,7 @@ export default function Register() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm text-muted mb-1.5">
-                Name
-              </label>
+              <label htmlFor="name" className="block text-sm text-muted mb-1.5">Name</label>
               <input
                 id="name"
                 name="name"
@@ -85,9 +77,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm text-muted mb-1.5">
-                Email
-              </label>
+              <label htmlFor="email" className="block text-sm text-muted mb-1.5">Email</label>
               <input
                 id="email"
                 name="email"
@@ -102,18 +92,13 @@ export default function Register() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm text-muted mb-1.5">
-                Password
-              </label>
-              <input
+              <label htmlFor="password" className="block text-sm text-muted mb-1.5">Password</label>
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
-                required
                 autoComplete="new-password"
                 value={form.password}
                 onChange={handleChange}
-                className="input-field"
                 placeholder="At least 6 characters"
               />
             </div>

@@ -15,4 +15,15 @@ const getMe = async () => {
   return data.data;
 };
 
-export default { register, login, getMe };
+const forgotPassword = async (email) => {
+  const { data } = await api.post("/auth/forgot-password", { email });
+  return data;
+};
+
+const resetPassword = async (token, password) => {
+  const { data } = await api.post(`/auth/reset-password/${token}`, { password });
+  return data;
+};
+
+export default { register, login, getMe, forgotPassword, resetPassword };
+// export default { register, login, getMe };
